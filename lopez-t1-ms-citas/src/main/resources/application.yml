@@ -1,0 +1,48 @@
+server:
+  port: 8081 # Este es el puerto del servicio de citas
+
+spring:
+  application:
+    name: citas-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/lopez_citas_db
+    username: root
+    password: mysql
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+    template:
+      default-topic: lopez-topic
+
+application:
+  client:
+    doctors-service:
+      url: http://localhost:8082
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
